@@ -1,4 +1,4 @@
-from archivo import guardar_registro, cargar_registros, CAMPOS
+from archivo import guardar_registro, cargar_registros, CAMPOS, SEPARADOR
 
 
 def registrar():
@@ -16,6 +16,13 @@ def registrar():
 
 
 def validar(datos):
+    for campo, valor in datos.items():
+        if not valor:
+            print(f"El campo {campo} no puede estar vacío.")
+            return False
+        if SEPARADOR in valor:
+            print(f"El campo {campo} no puede contener el carácter '{SEPARADOR}'.")
+            return False
     if not (datos["ruc_cliente"].isdigit() and len(datos["ruc_cliente"]) == 11):
         print("El RUC del cliente debe tener 11 dígitos.")
         return False
