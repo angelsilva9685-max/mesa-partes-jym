@@ -1,3 +1,5 @@
+import os
+
 ARCHIVO = "guias.txt"
 SEPARADOR = "|"
 CAMPOS = ["codigo_sunat", "ruc_cliente", "ruc_proveedor", "fecha",
@@ -6,8 +8,20 @@ CAMPOS = ["codigo_sunat", "ruc_cliente", "ruc_proveedor", "fecha",
 
 
 def guardar_registro(datos):
-    pass
+    with open(ARCHIVO, "a", encoding="utf-8") as f:
+        linea = SEPARADOR.join(str(datos[campo]) for campo in CAMPOS)
+        f.write(linea + "\n")
 
 
 def cargar_registros():
-    return []
+    registros = []
+    if not os.path.exists(ARCHIVO):
+        return registros
+    with open(ARCHIVO, "r", encoding="utf-8") as f:
+        for linea in f:
+            linea = linea.strip()
+            if not linea:
+                continue
+            valores = linea.split(SEPARADOR)
+            registros.append(dict(zip(CAMPOS, valores)))
+    return registros
