@@ -1,11 +1,13 @@
+# Importamos las funcines del (archivo.py)
 from archivo import guardar_registro, cargar_registros, CAMPOS, SEPARADOR
 
+# Bucle infinito: Atrapa al usuario aquí adentro hasta que llene los datos sin equivocarse
 def registrar():
     while True:
         datos = {}
         for campo in CAMPOS:
             datos[campo] = input(f"Ingrese {campo}: ").strip()
-
+        # Validamos los datos y si son correctos, los guardamos en el archivo y salimos del bucle
         if validar(datos):
             guardar_registro(datos)
             print("Guía registrada con éxito.")
@@ -15,7 +17,7 @@ def registrar():
 
 
 def validar(datos):
-    # 1. Validar que no haya campos vacíos y que no usen el separador "|"
+    # Validar que no haya campos vacíos y que no usen el separador "|"
     for campo, valor in datos.items():
         if not valor:
             print(f"El campo {campo} no puede estar vacío.")
@@ -24,13 +26,13 @@ def validar(datos):
             print(f"El campo {campo} no puede contener el carácter '{SEPARADOR}'.")
             return False
 
-    # 2. Validar que ambos RUCs tengan 11 dígitos y sean solo números
+    # Validar que ambos RUCs tengan 11 dígitos y sean solo números
     for tipo_ruc in ["ruc_cliente", "ruc_proveedor"]:
         if not (datos[tipo_ruc].isdigit() and len(datos[tipo_ruc]) == 11):
             print(f"El {tipo_ruc.replace('_', ' ').title()} debe tener 11 dígitos.")
             return False
 
-    # 3. Validar que la cantidad sea un número mayor a 0
+    # Validar que la cantidad sea un número mayor a 0
     try:
         cantidad = float(datos["cantidades"])
         if cantidad <= 0:
@@ -40,7 +42,7 @@ def validar(datos):
         print("La cantidad debe ser un número válido.")
         return False
 
-    # 4. Validar que el código SUNAT no esté repetido
+    # Validar que el código SUNAT no esté repetido
     registros = cargar_registros()
     if any(registro["codigo_sunat"] == datos["codigo_sunat"] for registro in registros):
         print("Ese código SUNAT ya está registrado.")
